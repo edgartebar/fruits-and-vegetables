@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                        https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Market\Domain\Fruit" table="fruit">
+        <id name="id" type="fruit_id" column="id" length="36" />
+
+        <embedded name="name" class="App\Market\Domain\FruitName" use-column-prefix="false" />
+        <embedded name="weight" class="App\Market\Domain\FruitWeight" use-column-prefix="false" />
+
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,14 @@
+items_post:
+    path: /items
+    controller: App\Market\Infrastructure\Controller\Fruit\ItemPostController
+    methods: [POST]
+
+items_list:
+    path: /items
+    controller: App\Market\Infrastructure\Controller\Fruit\ItemGetListController
+    methods: [GET]
+
+items_search:
+    path: /items/search
+    controller: App\Market\Infrastructure\Controller\Fruit\ItemGetSearchController
+    methods: [GET]

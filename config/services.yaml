@@ -1,0 +1,58 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    _instanceof:
+        App\Shared\Domain\Collection:
+            tags: ['market.collection']
+
+    App\Market\Infrastructure\Command\:
+        resource: '../src/Market/Infrastructure/Command'
+        tags: [ 'console.command' ]
+
+    App\Market\Infrastructure\Controller\:
+        resource: '../src/Market/Infrastructure/Controller'
+        tags: [ 'controller.service_arguments' ]
+
+    App\Market\Infrastructure\Persistence\Doctrine\DoctrineFruitRepository:
+        tags: [ 'doctrine.repository_service' ]
+
+    App\Market\Infrastructure\Persistence\Doctrine\DoctrineVegetableRepository:
+        tags: [ 'doctrine.repository_service' ]
+
+    App\Market\Domain\FruitRepository: '@App\Market\Infrastructure\Persistence\Doctrine\DoctrineFruitRepository'
+    App\Market\Domain\VegetableRepository: '@App\Market\Infrastructure\Persistence\Doctrine\DoctrineVegetableRepository'
+
+    App\Market\Application\Create\CreateItemUseCase:
+        arguments:
+            $collections: !tagged market.collection
+
+    App\Market\Application\Search\SearchItemUseCase:
+        arguments: [ !tagged market.collection ]
+
+    App\Market\Application\List\ListItemUseCase:
+        arguments: [ !tagged market.collection ]
+
+when@test:
+    services:
+        App\Tests\Functional\DataFixtures\:
+            resource: '../tests/Functional/DataFixtures'
+            tags: ['doctrine.fixture.orm']
