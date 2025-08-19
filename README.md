@@ -104,8 +104,15 @@ I added a new docker-compose file a Dockerfile file i wasn't able to pull the tt
 docker-compose up -d
 ```
 
+### Run Doctrine Migration:
+```bash
+docker exec -it web /bin/bash;
+bin/console doctrine:migrations:migrate
+```
+
 ### Ingest the sample data:
 ```bash
+docker exec -it web /bin/bash;
 bin/console market:import-data
 ```
 
